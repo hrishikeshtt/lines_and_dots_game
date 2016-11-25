@@ -67,17 +67,17 @@ let LineDrawing = class LineDrawing {
             lineDrawing.ctx.beginPath();
             lineDrawing.ctx.strokeStyle = "yellow";
             // GETTING FOUR ADJACENT POINTS
-            var lesserX, lesserY = 50, greaterX, greaterY;
+            var lesserX, lesserY, greaterX, greaterY;
             var clientX = event.clientX;
             var clientY = event.clientY;
-            var clickedX = clientX - 30; // Pixel adjustment
-            var clickedY = clientY - 170; // Pixel adjustment
+            var clickedX = clientX - 30; // Pixel adjustment;  clicked ( 80, 200 ) is ( 50, 50 )
+            var clickedY = clientY - 150; // Pixel adjustment
             for (var i = 0; i < lineDrawing.size - 1; i++) {
                 if (clientX > 80 + (50 * i) && clientX < 80 + (50 * (i + 1))) {
                     lesserX = lineDrawing.startX * (i + 1);
                     greaterX = lineDrawing.startX * (i + 2);
                 }
-                if (clientY > 220 + (50 * i) && clientY < 220 + (50 * (i + 1))) {
+                if (clientY > 200 + (50 * i) && clientY < 200 + (50 * (i + 1))) {
                     lesserY = lineDrawing.startY * (i + 1);
                     greaterY = lineDrawing.startY * (i + 2);
                 }
@@ -85,7 +85,6 @@ let LineDrawing = class LineDrawing {
             var quadPosition = 0;
             var quadPositionCalculator = new QuadPosition();
             quadPosition = quadPositionCalculator.CalculateQuadPosition(lesserY, clickedY, lesserX, clickedX, greaterX);
-            console.log(quadPosition);
             // SETTING XY POINTS TO DRAW LINE
             var x1;
             var y1;
@@ -128,7 +127,7 @@ let LineDrawing = class LineDrawing {
             currentCoordinates.push(x2);
             currentCoordinates.push(y2);
             var isDrawn = false;
-            if (drawnLineCoordinates.length > 0) {
+            if (drawnLineCoordinates.length > 0 && quadPosition != -1) {
                 for (let coordinate of drawnLineCoordinates) {
                     if (coordinate[0] == x1 && coordinate[1] == y1 && coordinate[2] == x2 && coordinate[3] == y2) {
                         isDrawn = true;
@@ -143,15 +142,17 @@ let LineDrawing = class LineDrawing {
                         lineDrawing.ctx.moveTo(x1, y1);
                         lineDrawing.ctx.lineTo(x2, y2);
                         lineDrawing.ctx.stroke();
+                        numberOfClicks++;
                     }
                 }
             }
-            else {
+            else if (quadPosition != -1) {
                 drawnLineCoordinates.push(currentCoordinates);
                 //Drawing the line
                 lineDrawing.ctx.moveTo(x1, y1);
                 lineDrawing.ctx.lineTo(x2, y2);
                 lineDrawing.ctx.stroke();
+                numberOfClicks++;
             }
             // Checking for completed square
             // For up square
@@ -222,47 +223,61 @@ let LineDrawing = class LineDrawing {
             if (verticalUpLeft && horizontalUp && verticalUpRight) {
                 alert("Up square completed");
                 players[playerIndex].Squares++;
-                // // Writing player name inside the completed square					
-                // lineDrawing.ctx.fillStyle = "red";
-                // lineDrawing.ctx.font = "10pt sans-serif";
-                // lineDrawing.ctx.textAlign="center"; 
-                // lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
-                numberOfClicks--;
+                // Writing player name inside the completed square					
+                lineDrawing.ctx.fillStyle = "red";
+                lineDrawing.ctx.font = "10pt sans-serif";
+                lineDrawing.ctx.textAlign = "center";
+                lineDrawing.ctx.fillText(players[playerIndex].Name, (x1 + x2) / 2, (y1 + y1 - 50) / 2);
             }
             // alert message for succeessfull down squre
             if (verticalDownLeft && horizontalDown && verticalDownRight) {
                 alert("Down square completed");
                 players[playerIndex].Squares++;
-                // // Writing player name inside the completed square					
-                // lineDrawing.ctx.fillStyle = "red";
-                // lineDrawing.ctx.font = "10pt sans-serif";
-                // lineDrawing.ctx.textAlign="center"; 
-                // lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
-                numberOfClicks--;
+                // Writing player name inside the completed square					
+                lineDrawing.ctx.fillStyle = "red";
+                lineDrawing.ctx.font = "10pt sans-serif";
+                lineDrawing.ctx.textAlign = "center";
+                lineDrawing.ctx.fillText(players[playerIndex].Name, (lesserX + greaterX) / 2, (lesserY + greaterY) / 2);
             }
             // alert message for succeessfull left squre
             if (horizontalLeftUp && verticalLeft && horizontalLeftDown) {
                 alert("Left square completed");
                 players[playerIndex].Squares++;
-                // // Writing player name inside the completed square					
-                // lineDrawing.ctx.fillStyle = "red";
-                // lineDrawing.ctx.font = "10pt sans-serif";
-                // lineDrawing.ctx.textAlign="center"; 
-                // lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
-                numberOfClicks--;
+                // Writing player name inside the completed square					
+                lineDrawing.ctx.fillStyle = "red";
+                lineDrawing.ctx.font = "10pt sans-serif";
+                lineDrawing.ctx.textAlign = "center";
+                lineDrawing.ctx.fillText(players[playerIndex].Name, (x1 + x1 - 50) / 2, (lesserY + greaterY) / 2);
             }
             // alert message for succeessfull right squre
             if (horizontalRightUp && verticalRight && horizontalRightDown) {
                 alert("Right square completed");
                 players[playerIndex].Squares++;
-                // // Writing player name inside the completed square					
-                // lineDrawing.ctx.fillStyle = "red";
-                // lineDrawing.ctx.font = "10pt sans-serif";
-                // lineDrawing.ctx.textAlign="center"; 
-                // lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
-                numberOfClicks--;
+                // Writing player name inside the completed square					
+                lineDrawing.ctx.fillStyle = "red";
+                lineDrawing.ctx.font = "10pt sans-serif";
+                lineDrawing.ctx.textAlign = "center";
+                lineDrawing.ctx.fillText(players[playerIndex].Name, (lesserX + greaterX) / 2, (lesserY + greaterY) / 2);
             }
-            numberOfClicks++;
+            // Showing the result				
+            // var  completedSquares = 0;
+            // var winner = null;
+            // var previousPlayerSquares = 0;
+            // for( let player of players ){
+            // completedSquares = completedSquares + player.Squares;				
+            // if( previousPlayerSquares < player.Squares ){
+            // previousPlayerSquares = player.Squares;
+            // winner = player.Name;
+            // }
+            // }
+            // if(completedSquares == 1){
+            // // Writing result					
+            // lineDrawing.ctx.fillStyle = "green";
+            // lineDrawing.ctx.font = "30pt sans-serif";
+            // lineDrawing.ctx.textAlign="center"; 
+            // lineDrawing.ctx.fillText( "Game over", 500, 100 );
+            // lineDrawing.ctx.fillText( "Winner is " + winner, 500, 200 );				
+            // }
         }, false);
     }
 };
@@ -283,21 +298,26 @@ class QuadPosition {
         this.clickedX = clickedX;
         this.greaterX = greaterX;
         // CALCULATING THE DIAGONAL QUAD POSITION ( excluding the chance of clicking in the diagonal )
-        if ((this.lesserY - this.clickedY) > (this.lesserX - this.clickedX)) {
-            if ((this.lesserY - this.clickedY > -(this.greaterX - this.clickedX))) {
-                return 0; // above 1 and above 2
+        if (this.lesserY != undefined && this.lesserX != undefined && this.greaterX) {
+            if ((this.lesserY - this.clickedY) > (this.lesserX - this.clickedX)) {
+                if ((this.lesserY - this.clickedY > -(this.greaterX - this.clickedX))) {
+                    return 0; // above 1 and above 2
+                }
+                else {
+                    return 1; // above 1 and below 2
+                }
             }
             else {
-                return 1; // above 1 and below 2
+                if ((this.lesserY - this.clickedY > -(this.greaterX - this.clickedX))) {
+                    return 2; // below 1 and above 2
+                }
+                else {
+                    return 3; // below 1 and below 2
+                }
             }
         }
         else {
-            if ((this.lesserY - this.clickedY > -(this.greaterX - this.clickedX))) {
-                return 2; // below 1 and above 2
-            }
-            else {
-                return 3; // below 1 and below 2
-            }
+            return -1;
         }
     }
 }
