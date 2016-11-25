@@ -1,0 +1,6 @@
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\obj\Debug\Angular 2.csprojResolveAssemblyReference.cache
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\bin\Angular 2.dll.config
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\bin\Angular 2.dll
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\bin\Angular 2.pdb
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\obj\Debug\Angular 2.dll
+c:\users\hthattarath\documents\visual studio 2013\Projects\Angular 2\Angular 2\obj\Debug\Angular 2.pdb
