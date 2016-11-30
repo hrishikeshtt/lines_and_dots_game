@@ -10,14 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 const core_1 = require('@angular/core');
 const platform_browser_1 = require('@angular/platform-browser');
+const ng_bootstrap_1 = require('@ng-bootstrap/ng-bootstrap');
 const app_component_1 = require('./app.component');
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule],
-        declarations: [app_component_1.AppComponent, app_component_1.LineDrawing],
-        bootstrap: [app_component_1.AppComponent, app_component_1.LineDrawing]
+        imports: [platform_browser_1.BrowserModule, ng_bootstrap_1.NgbModule.forRoot()],
+        declarations: [app_component_1.AppComponent, app_component_1.LineDrawing, app_component_1.NgbdModalBasic],
+        bootstrap: [app_component_1.AppComponent, app_component_1.LineDrawing, app_component_1.NgbdModalBasic]
     }), 
     __metadata('design:paramtypes', [])
 ], AppModule);

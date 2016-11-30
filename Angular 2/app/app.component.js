@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const core_1 = require('@angular/core');
+const ng_bootstrap_1 = require('@ng-bootstrap/ng-bootstrap');
 let AppComponent = class AppComponent {
     constructor() {
         this.Topic = "Play Dots and Lines";
@@ -61,6 +62,7 @@ let LineDrawing = class LineDrawing {
             player.Squares = 0;
             players.push(player);
         }
+        var completedSquares = 0;
         this.canvas.addEventListener('click', function (event) {
             // Player details
             var playerIndex = numberOfClicks % noOfPlayers;
@@ -228,6 +230,7 @@ let LineDrawing = class LineDrawing {
                 lineDrawing.ctx.font = "10pt sans-serif";
                 lineDrawing.ctx.textAlign = "center";
                 lineDrawing.ctx.fillText(players[playerIndex].Name, (x1 + x2) / 2, (y1 + y1 - 50) / 2);
+                completedSquares++;
             }
             // alert message for succeessfull down squre
             if (verticalDownLeft && horizontalDown && verticalDownRight) {
@@ -238,6 +241,7 @@ let LineDrawing = class LineDrawing {
                 lineDrawing.ctx.font = "10pt sans-serif";
                 lineDrawing.ctx.textAlign = "center";
                 lineDrawing.ctx.fillText(players[playerIndex].Name, (lesserX + greaterX) / 2, (lesserY + greaterY) / 2);
+                completedSquares++;
             }
             // alert message for succeessfull left squre
             if (horizontalLeftUp && verticalLeft && horizontalLeftDown) {
@@ -248,6 +252,7 @@ let LineDrawing = class LineDrawing {
                 lineDrawing.ctx.font = "10pt sans-serif";
                 lineDrawing.ctx.textAlign = "center";
                 lineDrawing.ctx.fillText(players[playerIndex].Name, (x1 + x1 - 50) / 2, (lesserY + greaterY) / 2);
+                completedSquares++;
             }
             // alert message for succeessfull right squre
             if (horizontalRightUp && verticalRight && horizontalRightDown) {
@@ -258,27 +263,35 @@ let LineDrawing = class LineDrawing {
                 lineDrawing.ctx.font = "10pt sans-serif";
                 lineDrawing.ctx.textAlign = "center";
                 lineDrawing.ctx.fillText(players[playerIndex].Name, (lesserX + greaterX) / 2, (lesserY + greaterY) / 2);
+                completedSquares++;
             }
-            // Showing the result				
-            // var  completedSquares = 0;
-            // var winner = null;
-            // var previousPlayerSquares = 0;
-            // for( let player of players ){
-            // completedSquares = completedSquares + player.Squares;				
-            // if( previousPlayerSquares < player.Squares ){
-            // previousPlayerSquares = player.Squares;
-            // winner = player.Name;
-            // }
-            // }
-            // if(completedSquares == 1){
-            // // Writing result					
-            // lineDrawing.ctx.fillStyle = "green";
-            // lineDrawing.ctx.font = "30pt sans-serif";
-            // lineDrawing.ctx.textAlign="center"; 
-            // lineDrawing.ctx.fillText( "Game over", 500, 100 );
-            // lineDrawing.ctx.fillText( "Winner is " + winner, 500, 200 );				
-            // }
+            if (completedSquares == 1) {
+                var ngbdModalBasic = new NgbdModalBasic();
+                var winnerSqaure = 0;
+                var winner = null;
+                for (let player of players) {
+                    if (player.Squares > winnerSqaure)
+                        winnerSqaure = player.Squares;
+                    winner = player.Name;
+                }
+                // Writing result					
+                lineDrawing.ctx.fillStyle = "green";
+                lineDrawing.ctx.font = "30pt sans-serif";
+                lineDrawing.ctx.textAlign = "center";
+                lineDrawing.ctx.fillText("Game over", 500, 100);
+                lineDrawing.ctx.fillText("Winner is " + winner, 500, 200);
+            }
         }, false);
+        // Showing the result
+        var winner = null;
+        var previousPlayerSquares = 0;
+        for (let player of players) {
+            completedSquares = completedSquares + player.Squares;
+            if (previousPlayerSquares < player.Squares) {
+                previousPlayerSquares = player.Squares;
+                winner = player.Name;
+            }
+        }
     }
 };
 LineDrawing = __decorate([
@@ -325,4 +338,35 @@ class QuadPosition {
 class Player {
 }
 ;
+let NgbdModalBasic = class NgbdModalBasic {
+    constructor(modalService) {
+        this.modalService = modalService;
+    }
+    open(content) {
+        this.modalService.open(content).result.then((result) => {
+            this.closeResult = `Closed with: ${result}`;
+        }, (reason) => {
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });
+    }
+    getDismissReason(reason) {
+        if (reason === ng_bootstrap_1.ModalDismissReasons.ESC) {
+            return 'by pressing ESC';
+        }
+        else if (reason === ng_bootstrap_1.ModalDismissReasons.BACKDROP_CLICK) {
+            return 'by clicking on a backdrop';
+        }
+        else {
+            return `with: ${reason}`;
+        }
+    }
+};
+NgbdModalBasic = __decorate([
+    core_1.Component({
+        selector: 'ngbd-modal-basic',
+        templateUrl: 'errorMessage.html'
+    }), 
+    __metadata('design:paramtypes', [ng_bootstrap_1.NgbModal])
+], NgbdModalBasic);
+exports.NgbdModalBasic = NgbdModalBasic;
 //# sourceMappingURL=app.component.js.map

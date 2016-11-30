@@ -1,4 +1,5 @@
 ﻿import { Component } from '@angular/core';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'my-app',
     template: '<h1>{{this.Topic}}</h1>'
@@ -77,6 +78,8 @@ export class LineDrawing {
 			player.Squares = 0;
 			players.push(player);
 		}
+		
+		var  completedSquares = 0;
 		
         this.canvas.addEventListener('click', function (event) {
 			
@@ -277,9 +280,9 @@ export class LineDrawing {
 					 lineDrawing.ctx.fillStyle = "red";
 					 lineDrawing.ctx.font = "10pt sans-serif";
 					 lineDrawing.ctx.textAlign="center"; 
-					 lineDrawing.ctx.fillText( players[playerIndex].Name, ( x1 + x2 ) / 2, ( y1 + y1-50 ) / 2 );
+					 lineDrawing.ctx.fillText( players[playerIndex].Name, ( x1 + x2 ) / 2, ( y1 + y1-50 ) / 2 );					
 					
-					
+					completedSquares ++ ;
 				}
 
 			// alert message for succeessfull down squre
@@ -293,7 +296,7 @@ export class LineDrawing {
 					 lineDrawing.ctx.textAlign="center"; 
 					 lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
 					
-					
+					completedSquares ++ ;
 				}
 				
 			// alert message for succeessfull left squre
@@ -307,7 +310,7 @@ export class LineDrawing {
 					 lineDrawing.ctx.textAlign="center"; 
 					 lineDrawing.ctx.fillText( players[playerIndex].Name, ( x1 + x1 -50 ) / 2, ( lesserY + greaterY ) / 2 );
 					 
-					
+					completedSquares ++ ;
 					
 				}
 				
@@ -322,30 +325,41 @@ export class LineDrawing {
 					 lineDrawing.ctx.textAlign="center"; 
 					 lineDrawing.ctx.fillText( players[playerIndex].Name, ( lesserX + greaterX ) / 2, ( lesserY + greaterY ) / 2 );
 					
-					
-				}	
+					completedSquares ++ ;
+			}
 
-			// Showing the result				
-			// var  completedSquares = 0;
-			// var winner = null;
-			// var previousPlayerSquares = 0;
-			// for( let player of players ){
-				// completedSquares = completedSquares + player.Squares;				
-				// if( previousPlayerSquares < player.Squares ){
-					// previousPlayerSquares = player.Squares;
-					// winner = player.Name;
-				// }
-			// }
-			// if(completedSquares == 1){
 				
-				// // Writing result					
-				// lineDrawing.ctx.fillStyle = "green";
-				// lineDrawing.ctx.font = "30pt sans-serif";
-				// lineDrawing.ctx.textAlign="center"; 
-				// lineDrawing.ctx.fillText( "Game over", 500, 100 );
-				// lineDrawing.ctx.fillText( "Winner is " + winner, 500, 200 );				
-			// }
+			if(completedSquares == 1 ){		// ( lineDrawing.size - 1 ) * ( lineDrawing.size - 1 )
+				var ngbdModalBasic = new NgbdModalBasic();
+				var winnerSqaure = 0 ;
+				var winner = null;
+				for( let player of players ){
+					if( player.Squares > winnerSqaure )
+						winnerSqaure = player.Squares;
+						winner = player.Name;
+				}				
+				 // Writing result					
+				 lineDrawing.ctx.fillStyle = "green";
+				 lineDrawing.ctx.font = "30pt sans-serif";
+				 lineDrawing.ctx.textAlign="center"; 
+				 lineDrawing.ctx.fillText( "Game over", 500, 100 );
+				 lineDrawing.ctx.fillText( "Winner is " + winner, 500, 200 );				
+			}
+					
         }, false);
+		
+		// Showing the result
+			 
+			 var winner = null;
+			 var previousPlayerSquares = 0;
+			 for( let player of players ){
+				 completedSquares = completedSquares + player.Squares;				
+				 if( previousPlayerSquares < player.Squares ){
+					 previousPlayerSquares = player.Squares;
+					 winner = player.Name;
+				}
+			 }
+			 
     }
 };
 
@@ -397,6 +411,33 @@ class Player {
 };
 
 
+@Component({
+  selector: 'ngbd-modal-basic',
+  templateUrl: 'errorMessage.html'
+})
+export class NgbdModalBasic {
+  closeResult: string;
+
+  constructor(private modalService: NgbModal) {}
+
+  open(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
+  }
+}
 
 
 
